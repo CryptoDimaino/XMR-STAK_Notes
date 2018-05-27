@@ -1,0 +1,73 @@
+=========================================================================
+UBUNTU 16.04 LTS
+=========================================================================
+
+- Update everything
+sudo apt-get update && sudo apt-get dist-upgrade
+
+
+- Remove all folders/Files
+rm -rf somefolder
+
+
+=========================================================================
+XMR-Stak Miner Install (CPU)
+=========================================================================
+
+sudo apt install libmicrohttpd-dev libssl-dev cmake build-essential libhwloc-dev
+
+git clone https://github.com/fireice-uk/xmr-stak.git
+
+cd xmr-stak/xmrstak
+
+nano donate-level.hpp
+
+cd ..
+
+cmake -DHWLOC_ENABLE=OFF -DMICROHTTPD_ENABLE=OFF -DCUDA_ENABLE=OFF -DOpenCL_ENABLE=OFF
+
+make install
+
+cd bin
+
+./xmr-stak
+
+
+=========================================================================
+Miner config
+=========================================================================
+
+- Algorithm
+- Pool
+- Address
+- Passsword
+- Rig Name
+
+
+=========================================================================
+Moneor Service
+=========================================================================
+
+nano /lib/systemd/system/xmr.service
+
+[Unit]
+Description=monero
+After=network.target
+[Service]
+ExecStart=/home/user/xmr-stak/bin/xmr-stak  --currency algorithm -o pool -u address -p password --config /home/user/xmr-stak/bin/config.txt --cpu /home/user/xmr-stak/bin/cpu.txt
+User=root
+Restart=always
+[Install]
+WantedBy=multi-user.target
+
+sudo systemctl daemon-reload
+
+sudo systemctl enable xmr.service
+
+sudo systemctl start xmr.service
+
+sudo systemctl stop xmr.service
+
+sudo systemctl restart xmr.service
+
+service xmr status
